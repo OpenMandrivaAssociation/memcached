@@ -1,11 +1,11 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.2.0
-Release:	%mkrel 3
+Version:	1.2.1
+Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
 URL:		http://www.danga.com/memcached/
-Source0:	http://www.danga.com/memcached/dist/%{name}-%{version}.tar.bz2
+Source0:	http://www.danga.com/memcached/dist/%{name}-%{version}.tar.gz
 Source1:	memcached.init
 Source2:	memcached.sysconfig
 Requires(post): rpm-helper
@@ -85,5 +85,3 @@ install -m0644 memcached.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/memcache
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/memcached
 %{_sbindir}/memcached
 %{_mandir}/man1/*
-
-
