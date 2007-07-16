@@ -1,7 +1,7 @@
+Summary:        High-performance memory object caching system
 Name:           memcached
 Version:        1.2.2
-Release:        %mkrel 1
-Summary:        High-performance memory object caching system
+Release:        %mkrel 2
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
@@ -20,18 +20,22 @@ BuildRequires:  perl-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
-memcached is a flexible memory object caching daemon designed to
-alleviate database load in dynamic web applications by storing
-objects  in memory. It's based on libevent to scale to any size
-needed, and is  specifically optimized to avoid swapping and
-always use non-blocking I/O.
+memcached is a flexible memory object caching daemon designed to alleviate
+database load in dynamic web applications by storing objects in memory. It's
+based on libevent to scale to any size needed, and is  specifically optimized
+to avoid swapping and always use non-blocking I/O.
 
 %prep
+
 %setup -q
 
 %build
-%{configure2_5x} --with-libevent=%{_prefix}
-%{make}
+%serverbuild
+
+%configure2_5x \
+    --with-libevent=%{_prefix}
+
+%make
 
 %check
 %{__make} test
