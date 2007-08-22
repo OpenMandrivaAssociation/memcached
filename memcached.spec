@@ -1,7 +1,7 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
-Version:        1.2.2
-Release:        %mkrel 2
+Version:        1.2.3
+Release:        %mkrel 1
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
@@ -48,6 +48,7 @@ export DONT_GPRINTIFY=1
 
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}%{_sysconfdir}/sysconfig
+install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}%{_mandir}/man1
 
@@ -55,6 +56,7 @@ install -m0755 memcached %{buildroot}%{_sbindir}/
 install -m0644 doc/memcached.1 %{buildroot}%{_mandir}/man1/
 install -m0755 %{SOURCE1} %{buildroot}%{_initrddir}/memcached
 install -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/memcached
+install -m0755 scripts/memcached-tool %{buildroot}%{_bindir}/memcached-tool
 
 %post
 %_post_service %{name}
@@ -77,5 +79,6 @@ install -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/memcached
 %doc doc/memory_management.txt doc/protocol.txt doc/CONTRIBUTORS
 %attr(0755,root,root) %{_initrddir}/memcached
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/memcached
+%{_bindir}/memcached-tool
 %{_sbindir}/memcached
 %{_mandir}/man1/*
