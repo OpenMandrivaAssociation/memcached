@@ -1,13 +1,20 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
 Version:        1.2.3
-Release:        %mkrel 1
+Release:        %mkrel 2
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
 Source0:        http://www.danga.com/memcached/dist/%{name}-%{version}.tar.gz
 Source1:        memcached.init
 Source2:        memcached.sysconfig
+Source3:        memcached.logrotate
+# http://code.sixapart.com/trac/memcached/changeset/629
+Patch0:		memcached-socket_perm.diff
+# http://repcached.lab.klab.org/
+# http://downloads.sourceforge.net/repcached/repcached-1.0-1.2.2.patch.gz
+Patch1:		repcached-1.0-1.2.3.diff
+Patch2:		memcached-save_pid_fix.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
@@ -25,38 +32,74 @@ database load in dynamic web applications by storing objects in memory. It's
 based on libevent to scale to any size needed, and is  specifically optimized
 to avoid swapping and always use non-blocking I/O.
 
+The memcached server binary comes in two flavours:
+
+ o memcached             - with threading support
+ o memcached-replication - with replication support
+
 %prep
 
 %setup -q
+%patch0 -p1
+%patch1 -p1
+%patch2 -p0
+
+cp %{SOURCE1} memcached.init
+cp %{SOURCE2} memcached.sysconfig
+cp %{SOURCE3} memcached.logrotate
+
+# lib64 fix
+perl -pi -e "s|/lib\b|/%{_lib}|g" configure.in
 
 %build
+rm -f configure
+libtoolize --copy --force; aclocal; automake --add-missing --copy --foreign; autoheader; autoconf
+
 %serverbuild
 
+
 %configure2_5x \
-    --with-libevent=%{_prefix}
+    --with-libevent=%{_prefix} \
+    --enable-replication
+
+%make
+cp -p %{name} _%{name}-replication_
+
+make clean
+
+%configure2_5x \
+    --with-libevent=%{_prefix} \
+    --enable-threads
 
 %make
 
-%check
-%{__make} test
+#%%check
+#%%{__make} test
 
 %install
-%{__rm} -rf %{buildroot}
+rm -rf %{buildroot}
 
 # don't fiddle with the initscript!
 export DONT_GPRINTIFY=1
 
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}%{_sysconfdir}/sysconfig
+install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}%{_mandir}/man1
+install -d %{buildroot}%{_localstatedir}/%{name}
+install -d %{buildroot}/var/log/%{name}
+install -d %{buildroot}/var/run/%{name}
 
-install -m0755 memcached %{buildroot}%{_sbindir}/
-install -m0644 doc/memcached.1 %{buildroot}%{_mandir}/man1/
-install -m0755 %{SOURCE1} %{buildroot}%{_initrddir}/memcached
-install -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/memcached
-install -m0755 scripts/memcached-tool %{buildroot}%{_bindir}/memcached-tool
+install -m0755 %{name} %{buildroot}%{_sbindir}/
+install -m0755 _%{name}-replication_ %{buildroot}%{_sbindir}/%{name}-replication
+install -m0644 doc/%{name}.1 %{buildroot}%{_mandir}/man1/
+
+install -m0755 memcached.init %{buildroot}%{_initrddir}/%{name}
+install -m0644 memcached.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -m0644 memcached.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -m0755 scripts/%{name}-tool %{buildroot}%{_bindir}/%{name}-tool
 
 %post
 %_post_service %{name}
@@ -71,14 +114,19 @@ install -m0755 scripts/memcached-tool %{buildroot}%{_bindir}/memcached-tool
 %_postun_userdel %{name}
 
 %clean
-%{__rm} -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog NEWS README TODO
+%doc AUTHORS* COPYING ChangeLog NEWS README TODO
 %doc doc/memory_management.txt doc/protocol.txt doc/CONTRIBUTORS
-%attr(0755,root,root) %{_initrddir}/memcached
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/memcached
-%{_bindir}/memcached-tool
-%{_sbindir}/memcached
+%attr(0755,root,root) %{_initrddir}/%{name}
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+%{_bindir}/%{name}-tool
+%{_sbindir}/%{name}
+%{_sbindir}/%{name}-replication
 %{_mandir}/man1/*
+%attr(0711,%{name},%{name}) %dir %{_localstatedir}/%{name}
+%attr(0711,%{name},%{name}) %dir /var/log/%{name}
+%attr(0711,%{name},%{name}) %dir /var/run/%{name}
