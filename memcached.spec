@@ -24,6 +24,7 @@ BuildRequires:  autoconf2.5
 BuildRequires:  libevent-devel
 BuildRequires:  libnet1.1.2-devel >= 1.1.2
 BuildRequires:  perl-devel
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 memcached is a flexible memory object caching daemon designed to alleviate
