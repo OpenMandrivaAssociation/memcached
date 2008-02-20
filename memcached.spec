@@ -1,7 +1,7 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
-Version:        1.2.3
-Release:        %mkrel 2
+Version:        1.2.4
+Release:        %mkrel 1
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
@@ -9,12 +9,9 @@ Source0:        http://www.danga.com/memcached/dist/%{name}-%{version}.tar.gz
 Source1:        memcached.init
 Source2:        memcached.sysconfig
 Source3:        memcached.logrotate
-# http://code.sixapart.com/trac/memcached/changeset/629
-Patch0:		memcached-socket_perm.diff
 # http://repcached.lab.klab.org/
-# http://downloads.sourceforge.net/repcached/repcached-1.0-1.2.2.patch.gz
-Patch1:		repcached-1.0-1.2.3.diff
-Patch2:		memcached-save_pid_fix.diff
+# http://downloads.sourceforge.net/repcached/repcached-1.1-1.2.4.patch.gz
+Patch1:		repcached-1.1-1.2.4.patch.gz
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
@@ -40,9 +37,7 @@ The memcached server binary comes in two flavours:
 %prep
 
 %setup -q
-%patch0 -p1
 %patch1 -p1
-%patch2 -p0
 
 cp %{SOURCE1} memcached.init
 cp %{SOURCE2} memcached.sysconfig
@@ -56,7 +51,6 @@ rm -f configure
 libtoolize --copy --force; aclocal; automake --add-missing --copy --foreign; autoheader; autoconf
 
 %serverbuild
-
 
 %configure2_5x \
     --with-libevent=%{_prefix} \
