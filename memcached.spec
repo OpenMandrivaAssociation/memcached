@@ -1,6 +1,6 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
-Version:        1.2.4
+Version:        1.2.5
 Release:        %mkrel 1
 License:        BSD
 Group:          System/Servers
@@ -10,8 +10,8 @@ Source1:        memcached.init
 Source2:        memcached.sysconfig
 Source3:        memcached.logrotate
 # http://repcached.lab.klab.org/
-# http://downloads.sourceforge.net/repcached/repcached-1.1-1.2.4.patch.gz
-Patch1:		repcached-1.1-1.2.4.patch.gz
+# http://downloads.sourceforge.net/repcached/repcached-1.2-1.2.4.patch.gz
+Patch1:		repcached-1.2-1.2.5.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
@@ -44,7 +44,7 @@ cp %{SOURCE2} memcached.sysconfig
 cp %{SOURCE3} memcached.logrotate
 
 # lib64 fix
-perl -pi -e "s|/lib\b|/%{_lib}|g" configure.in
+perl -pi -e "s|/lib\b|/%{_lib}|g" configure.*
 
 %build
 rm -f configure
@@ -53,6 +53,9 @@ libtoolize --copy --force; aclocal; automake --add-missing --copy --foreign; aut
 %serverbuild
 
 %configure2_5x \
+%ifarch x86_64
+    --enable-64bit \
+%endif
     --with-libevent=%{_prefix} \
     --enable-replication
 
@@ -62,6 +65,9 @@ cp -p %{name} _%{name}-replication_
 make clean
 
 %configure2_5x \
+%ifarch x86_64
+    --enable-64bit \
+%endif
     --with-libevent=%{_prefix} \
     --enable-threads
 
