@@ -1,7 +1,7 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
 Version:        1.2.5
-Release:        %mkrel 1
+Release:        %mkrel 2
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
@@ -21,7 +21,7 @@ BuildRequires:  autoconf2.5
 BuildRequires:  libevent-devel
 BuildRequires:  libnet1.1.2-devel >= 1.1.2
 BuildRequires:  perl-devel
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 memcached is a flexible memory object caching daemon designed to alleviate
