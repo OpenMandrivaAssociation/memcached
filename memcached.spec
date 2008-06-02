@@ -88,7 +88,7 @@ install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}%{_mandir}/man1
-install -d %{buildroot}%{_localstatedir}/%{name}
+install -d %{buildroot}%{_localstatedir}/lib/%{name}
 install -d %{buildroot}/var/log/%{name}
 install -d %{buildroot}/var/run/%{name}
 
@@ -127,6 +127,6 @@ rm -rf %{buildroot}
 %{_sbindir}/%{name}
 %{_sbindir}/%{name}-replication
 %{_mandir}/man1/*
-%attr(0711,%{name},%{name}) %dir %{_localstatedir}/%{name}
+%attr(0711,%{name},%{name}) %dir %{_localstatedir}/lib/%{name}
 %attr(0711,%{name},%{name}) %dir /var/log/%{name}
 %attr(0711,%{name},%{name}) %dir /var/run/%{name}
