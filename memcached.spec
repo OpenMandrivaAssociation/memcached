@@ -1,7 +1,7 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
 Version:        1.2.5
-Release:        %mkrel 2
+Release:        %mkrel 3
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
@@ -65,6 +65,7 @@ cp -p %{name} _%{name}-replication_
 make clean
 
 %configure2_5x \
+    --localstatedir=/var/lib \
 %ifarch x86_64
     --enable-64bit \
 %endif
@@ -88,7 +89,7 @@ install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sbindir}
 install -d %{buildroot}%{_mandir}/man1
-install -d %{buildroot}%{_localstatedir}/lib/%{name}
+install -d %{buildroot}/var/lib/%{name}
 install -d %{buildroot}/var/log/%{name}
 install -d %{buildroot}/var/run/%{name}
 
@@ -127,6 +128,6 @@ rm -rf %{buildroot}
 %{_sbindir}/%{name}
 %{_sbindir}/%{name}-replication
 %{_mandir}/man1/*
-%attr(0711,%{name},%{name}) %dir %{_localstatedir}/lib/%{name}
+%attr(0711,%{name},%{name}) %dir /var/lib/%{name}
 %attr(0711,%{name},%{name}) %dir /var/log/%{name}
 %attr(0711,%{name},%{name}) %dir /var/run/%{name}
