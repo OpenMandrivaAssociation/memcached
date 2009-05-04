@@ -1,7 +1,7 @@
 Summary:        High-performance memory object caching system
 Name:           memcached
 Version:        1.2.6
-Release:        %mkrel 4
+Release:        %mkrel 5
 License:        BSD
 Group:          System/Servers
 URL:            http://www.danga.com/memcached/
@@ -11,6 +11,7 @@ Source2:        memcached.sysconfig
 Source3:        memcached.logrotate
 # http://repcached.lab.klab.org/
 Patch0:		http://dfn.dl.sourceforge.net/sourceforge/repcached/repcached-2.2-1.2.6.patch.gz
+Patch1:		memcached-1.2.6-CVE-2009-1255.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
@@ -37,6 +38,7 @@ The memcached server binary comes in two flavours:
 
 %setup -q
 %patch0 -p1
+%patch1 -p0 -b .CVE-2009-1255
 
 cp %{SOURCE1} memcached.init
 cp %{SOURCE2} memcached.sysconfig
