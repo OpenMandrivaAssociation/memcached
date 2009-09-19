@@ -1,24 +1,24 @@
-Summary:        High-performance memory object caching system
-Name:           memcached
-Version:        1.2.8
-Release:        %mkrel 1
-License:        BSD
-Group:          System/Servers
-URL:            http://www.danga.com/memcached/
-Source0:        http://www.danga.com/memcached/dist/%{name}-%{version}.tar.gz
-Source1:        memcached.init
-Source2:        memcached.sysconfig
-Source3:        memcached.logrotate
-# http://repcached.lab.klab.org/
-Patch0:		http://dfn.dl.sourceforge.net/sourceforge/repcached/repcached-2.2-1.2.8.patch.gz
+Summary:	High-performance memory object caching system
+Name:		memcached
+Version:	1.4.1
+Release:	%mkrel 1
+License:	BSD
+Group:		System/Servers
+URL:		http://www.danga.com/memcached/
+Source0:	http://www.danga.com/memcached/dist/%{name}-%{version}.tar.gz
+Source1:	memcached.init
+Source2:	memcached.sysconfig
+Source3:	memcached.logrotate
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
 Requires(postun): rpm-helper
-BuildRequires:  automake1.7
-BuildRequires:  autoconf2.5
-BuildRequires:  libevent-devel
-BuildRequires:  perl-devel
+BuildRequires:	autoconf2.5
+BuildRequires:	automake1.7
+BuildRequires:	libevent-devel
+BuildRequires:	libxslt-proc
+BuildRequires:	perl-devel
+BuildRequires:	doxygen
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -27,15 +27,9 @@ database load in dynamic web applications by storing objects in memory. It's
 based on libevent to scale to any size needed, and is  specifically optimized
 to avoid swapping and always use non-blocking I/O.
 
-The memcached server binary comes in two flavours:
-
- o memcached             - with threading support
- o memcached-replication - with replication support
-
 %prep
 
 %setup -q
-%patch0 -p1
 
 cp %{SOURCE1} memcached.init
 cp %{SOURCE2} memcached.sysconfig
@@ -45,8 +39,6 @@ cp %{SOURCE3} memcached.logrotate
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure.*
 
 %build
-rm -f configure
-libtoolize --copy --force; aclocal; automake --add-missing --copy --foreign; autoheader; autoconf
 
 %serverbuild
 
@@ -55,26 +47,13 @@ libtoolize --copy --force; aclocal; automake --add-missing --copy --foreign; aut
 %ifarch x86_64
     --enable-64bit \
 %endif
-    --with-libevent=%{_prefix} \
-    --enable-replication
+    --with-libevent=%{_prefix}
 
 %make
-cp -p %{name} _%{name}-replication_
+make docs
 
-make clean
-
-%configure2_5x \
-    --localstatedir=/var/lib \
-%ifarch x86_64
-    --enable-64bit \
-%endif
-    --with-libevent=%{_prefix} \
-    --enable-threads
-
-%make
-
-#%%check <- temporary borked
-#%%{__make} test
+%check
+make test
 
 %install
 rm -rf %{buildroot}
@@ -93,7 +72,6 @@ install -d %{buildroot}/var/log/%{name}
 install -d %{buildroot}/var/run/%{name}
 
 install -m0755 %{name} %{buildroot}%{_sbindir}/
-install -m0755 _%{name}-replication_ %{buildroot}%{_sbindir}/%{name}-replication
 install -m0644 doc/%{name}.1 %{buildroot}%{_mandir}/man1/
 
 install -m0755 memcached.init %{buildroot}%{_initrddir}/%{name}
@@ -119,13 +97,12 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc AUTHORS* COPYING ChangeLog NEWS README TODO
-%doc doc/memory_management.txt doc/protocol.txt doc/CONTRIBUTORS
+%doc doc/memory_management.txt doc/protocol.txt doc/CONTRIBUTORS html
 %attr(0755,root,root) %{_initrddir}/%{name}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %{_bindir}/%{name}-tool
 %{_sbindir}/%{name}
-%{_sbindir}/%{name}-replication
 %{_mandir}/man1/*
 %attr(0711,%{name},%{name}) %dir /var/lib/%{name}
 %attr(0711,%{name},%{name}) %dir /var/log/%{name}
