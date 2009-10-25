@@ -1,6 +1,6 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.1
+Version:	1.4.2
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
@@ -96,7 +96,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
-%doc AUTHORS* COPYING ChangeLog NEWS README TODO
+%doc AUTHORS* COPYING ChangeLog NEWS README
 %doc doc/memory_management.txt doc/protocol.txt doc/CONTRIBUTORS html
 %attr(0755,root,root) %{_initrddir}/%{name}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
