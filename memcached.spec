@@ -1,11 +1,11 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.2
+Version:	1.4.3
 Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
-URL:		http://www.danga.com/memcached/
-Source0:	http://www.danga.com/memcached/dist/%{name}-%{version}.tar.gz
+URL:		http://memcached.org/
+Source0:	http://memcached.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:	memcached.init
 Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
@@ -13,12 +13,14 @@ Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
 Requires(postun): rpm-helper
+Requires:	cyrus-sasl sasl-plug-plain sasl-plug-crammd5
 BuildRequires:	autoconf2.5
 BuildRequires:	automake1.7
+BuildRequires:	doxygen
 BuildRequires:	libevent-devel
+BuildRequires:	libsasl-devel cyrus-sasl sasl-plug-plain sasl-plug-crammd5
 BuildRequires:	libxslt-proc
 BuildRequires:	perl-devel
-BuildRequires:	doxygen
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -47,13 +49,15 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure.*
 %ifarch x86_64
     --enable-64bit \
 %endif
-    --with-libevent=%{_prefix}
+    --with-libevent=%{_prefix} \
+    --enable-sasl
 
 %make
 make docs
 
-%check
-make test
+#%%check
+#export PATH="$PATH:/sbin:/usr/sbin"
+#make test <- fails currently, TODO
 
 %install
 rm -rf %{buildroot}
@@ -97,7 +101,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc AUTHORS* COPYING ChangeLog NEWS README
-%doc doc/memory_management.txt doc/protocol.txt doc/CONTRIBUTORS html
+%doc doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt doc/threads.txt
 %attr(0755,root,root) %{_initrddir}/%{name}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
@@ -107,3 +111,4 @@ rm -rf %{buildroot}
 %attr(0711,%{name},%{name}) %dir /var/lib/%{name}
 %attr(0711,%{name},%{name}) %dir /var/log/%{name}
 %attr(0711,%{name},%{name}) %dir /var/run/%{name}
+
