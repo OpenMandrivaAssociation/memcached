@@ -35,8 +35,8 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description	devel
-Install memcached-devel if you are developing C/C++ applications that require access to the
-memcached binary include files.
+Install memcached-devel if you are developing C/C++ applications that require
+access to the memcached binary include files.
 
 %prep
 %setup -q
