@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
 Version:	1.4.4
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
@@ -29,59 +29,39 @@ database load in dynamic web applications by storing objects in memory. It's
 based on libevent to scale to any size needed, and is  specifically optimized
 to avoid swapping and always use non-blocking I/O.
 
-%prep
+%package	devel
+Summary:	Files needed for development using memcached protocol
+Group:		Development/Libraries 
+Requires:	%{name} = %{version}-%{release}
 
+%description	devel
+Install memcached-devel if you are developing C/C++ applications that require access to the
+memcached binary include files.
+
+%prep
 %setup -q
 
-cp %{SOURCE1} memcached.init
-cp %{SOURCE2} memcached.sysconfig
-cp %{SOURCE3} memcached.logrotate
-
-# lib64 fix
-perl -pi -e "s|/lib\b|/%{_lib}|g" configure.*
-
 %build
-
 %serverbuild
 
-%configure2_5x \
-    --localstatedir=/var/lib \
-%ifarch x86_64
-    --enable-64bit \
-%endif
-    --with-libevent=%{_prefix} \
-    --enable-sasl
-
+%configure2_5x	--enable-sasl
 %make
 make docs
 
-#%%check
+#%check
 #export PATH="$PATH:/sbin:/usr/sbin"
 #make test <- fails currently, TODO
 
 %install
 rm -rf %{buildroot}
 
-# don't fiddle with the initscript!
-export DONT_GPRINTIFY=1
+%makeinstall_std
 
-install -d %{buildroot}%{_initrddir}
-install -d %{buildroot}%{_sysconfdir}/sysconfig
-install -d %{buildroot}%{_sysconfdir}/logrotate.d
-install -d %{buildroot}%{_bindir}
-install -d %{buildroot}%{_sbindir}
-install -d %{buildroot}%{_mandir}/man1
-install -d %{buildroot}/var/lib/%{name}
-install -d %{buildroot}/var/log/%{name}
+install -m755 %{SOURCE1} -D %{buildroot}%{_initrddir}/%{name}
+install -m644 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -m755 scripts/%{name}-tool %{buildroot}%{_bindir}/%{name}-tool
 install -d %{buildroot}/var/run/%{name}
-
-install -m0755 %{name} %{buildroot}%{_sbindir}/
-install -m0644 doc/%{name}.1 %{buildroot}%{_mandir}/man1/
-
-install -m0755 memcached.init %{buildroot}%{_initrddir}/%{name}
-install -m0644 memcached.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-install -m0644 memcached.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-install -m0755 scripts/%{name}-tool %{buildroot}%{_bindir}/%{name}-tool
 
 %post
 %_post_service %{name}
@@ -102,13 +82,15 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc AUTHORS* COPYING ChangeLog NEWS README
 %doc doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt doc/threads.txt
-%attr(0755,root,root) %{_initrddir}/%{name}
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+%attr(755,%{name},%{name}) %dir %{_localstatedir}/run/%{name}
 %{_bindir}/%{name}-tool
-%{_sbindir}/%{name}
-%{_mandir}/man1/*
-%attr(0711,%{name},%{name}) %dir /var/lib/%{name}
-%attr(0711,%{name},%{name}) %dir /var/log/%{name}
-%attr(0711,%{name},%{name}) %dir /var/run/%{name}
+%{_bindir}/%{name}
+%{_initrddir}/%{name}
+%{_mandir}/man1/%{name}.1*
 
+%files devel
+%defattr(-,root,root)
+%dir %{_includedir}/memcached
+%{_includedir}/memcached/*.h
