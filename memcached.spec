@@ -19,6 +19,8 @@ BuildRequires:	automake1.7
 BuildRequires:	doxygen
 BuildRequires:	libevent-devel
 BuildRequires:	libsasl-devel cyrus-sasl sasl-plug-plain sasl-plug-crammd5
+# Required by test suite
+BuildRequires:	sasl-plug-sasldb
 BuildRequires:	libxslt-proc
 BuildRequires:	perl-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -48,9 +50,9 @@ access to the memcached binary include files.
 %make
 make docs
 
-#%check
-#export PATH="$PATH:/sbin:/usr/sbin"
-#make test <- fails currently, TODO
+%check
+export PATH="$PATH:/sbin:/usr/sbin"
+make test
 
 %install
 rm -rf %{buildroot}
