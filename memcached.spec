@@ -31,7 +31,7 @@ to avoid swapping and always use non-blocking I/O.
 
 %package	devel
 Summary:	Files needed for development using memcached protocol
-Group:		Development/Libraries 
+Group:		Development/C
 Requires:	%{name} = %{version}-%{release}
 
 %description	devel
