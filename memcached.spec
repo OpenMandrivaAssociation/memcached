@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.4
-Release:	%mkrel 2
+Version:	1.4.5
+Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
@@ -9,6 +9,8 @@ Source0:	http://memcached.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:	memcached.init
 Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
+# (cg) The test profileing stuff doesn't work
+Patch0001:	0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
@@ -42,9 +44,13 @@ access to the memcached binary include files.
 
 %prep
 %setup -q
+%patch0001 -p1 -b .broken-test
 
 %build
 %serverbuild
+
+# (cg) Due to patch0001
+aclocal && autoconf && automake --add-missing
 
 %configure2_5x	--enable-sasl
 %make
