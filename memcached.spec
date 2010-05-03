@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
 Version:	1.4.5
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
