@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
 Version:	1.4.5
-Release:	%mkrel 5
+Release:	%mkrel 6
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
@@ -18,7 +18,7 @@ Requires(pre):  rpm-helper
 Requires(postun): rpm-helper
 Requires:	cyrus-sasl sasl-plug-plain sasl-plug-crammd5
 BuildRequires:	autoconf2.5
-BuildRequires:	automake1.7
+BuildRequires:	automake
 BuildRequires:	doxygen
 BuildRequires:	libevent-devel
 BuildRequires:	libsasl-devel cyrus-sasl sasl-plug-plain sasl-plug-crammd5
