@@ -12,6 +12,7 @@ Source3:	memcached.logrotate
 # (cg) The test profileing stuff doesn't work
 Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
 Patch1:		memcached-1.4.5-issue60.diff
+Patch2:		memcached-1.4.5-disable-werror.patch
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires(pre):  rpm-helper
@@ -47,13 +48,11 @@ access to the memcached binary include files.
 %setup -q
 %patch0 -p1 -b .broken-test
 %patch1 -p0 -b .issue60
+%patch2 -p0 -b .werror
 
 %build
+autoreconf -fi
 %serverbuild
-
-# (cg) Due to patch0001
-aclocal && autoconf && automake --add-missing
-
 %configure2_5x	--enable-sasl
 %make
 make docs
