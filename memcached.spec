@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.5
-Release:	%mkrel 7
+Version:	1.4.6
+Release:	%mkrel 1
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
@@ -11,7 +11,6 @@ Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
 # (cg) The test profileing stuff doesn't work
 Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
-Patch1:		memcached-1.4.5-issue60.diff
 Patch2:		memcached-1.4.5-disable-werror.patch
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -47,7 +46,6 @@ access to the memcached binary include files.
 %prep
 %setup -q
 %patch0 -p1 -b .broken-test
-%patch1 -p0 -b .issue60
 %patch2 -p0 -b .werror
 
 %build
@@ -90,7 +88,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc AUTHORS* COPYING ChangeLog NEWS README
-%doc doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt doc/threads.txt
+%doc doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %attr(755,%{name},%{name}) %dir %{_localstatedir}/run/%{name}
