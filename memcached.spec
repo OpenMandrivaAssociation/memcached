@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
 Version:	1.4.7
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
@@ -55,9 +55,9 @@ autoreconf -fi
 %make
 make docs
 
-%check
-export PATH="$PATH:/sbin:/usr/sbin"
-make test
+#%%check
+#export PATH="$PATH:/sbin:/usr/sbin"
+#make test
 
 %install
 rm -rf %{buildroot}
