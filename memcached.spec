@@ -1,7 +1,7 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.10
-Release:	%mkrel 1
+Version:	1.4.13
+Release:	1
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
@@ -26,7 +26,6 @@ BuildRequires:	libsasl-devel cyrus-sasl sasl-plug-plain sasl-plug-crammd5
 BuildRequires:	sasl-plug-sasldb
 BuildRequires:	libxslt-proc
 BuildRequires:	perl-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 memcached is a flexible memory object caching daemon designed to alleviate
@@ -60,8 +59,6 @@ make docs
 #make test
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
 
 install -m755 %{SOURCE1} -D %{buildroot}%{_initrddir}/%{name}
@@ -82,11 +79,7 @@ install -d %{buildroot}/var/run/%{name}
 %postun
 %_postun_userdel %{name}
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %doc AUTHORS* COPYING ChangeLog NEWS README
 %doc doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
@@ -98,6 +91,5 @@ rm -rf %{buildroot}
 %{_mandir}/man1/%{name}.1*
 
 %files devel
-%defattr(-,root,root)
 %dir %{_includedir}/memcached
 %{_includedir}/memcached/*.h
