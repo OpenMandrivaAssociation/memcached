@@ -1,14 +1,14 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
 Version:	1.4.13
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Servers
 URL:		http://memcached.org/
 Source0:	http://memcached.googlecode.com/files/%{name}-%{version}.tar.gz
-Source1:	memcached.init
 Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
+Source4:	memcached.service
 # (cg) The test profileing stuff doesn't work
 Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
 Patch2:		memcached-1.4.5-disable-werror.patch
@@ -50,7 +50,7 @@ access to the memcached binary include files.
 %build
 autoreconf -fi
 %serverbuild
-%configure2_5x	--enable-sasl
+%configure2_5x --enable-sasl
 %make
 make docs
 
@@ -61,9 +61,10 @@ make docs
 %install
 %makeinstall_std
 
-install -m755 %{SOURCE1} -D %{buildroot}%{_initrddir}/%{name}
 install -m644 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -m755 %{SOURCE4} -D %{buildroot}/lib/systemd/system/%{name}.service
+
 install -m755 scripts/%{name}-tool %{buildroot}%{_bindir}/%{name}-tool
 install -d %{buildroot}/var/run/%{name}
 
@@ -87,8 +88,8 @@ install -d %{buildroot}/var/run/%{name}
 %attr(755,%{name},%{name}) %dir %{_localstatedir}/run/%{name}
 %{_bindir}/%{name}-tool
 %{_bindir}/%{name}
-%{_initrddir}/%{name}
 %{_mandir}/man1/%{name}.1*
+/lib/systemd/system/%{name}.service
 
 %files devel
 %dir %{_includedir}/memcached
