@@ -1,0 +1,14 @@
+[Unit]
+Description=Memcached NoSQL key+value store on port %I
+After=network.target
+
+[Service]
+Type=forking
+User=memcached
+PIDFile=/var/run/memcached/%i.pid
+Environment=IPADDR=127.0.0.1 CACHESIZE=64 THREADS=4 MAXCONN=1024 OPTIONS=
+EnvironmentFile=-/etc/sysconfig/memcached
+ExecStart=/usr/bin/memcached -d -l $IPADDR -p %i -U %i -m $CACHESIZE -t $THREADS -c $MAXCONN $OPTIONS -P /var/run/memcached/%i.pid
+
+[Install]
+Alias=multi-user.target.wants/memcached@11211.service

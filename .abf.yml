@@ -1,5 +1,2 @@
 sources:
-  "memcached-1.4.13.tar.gz:"	d9a48d222de53a2603fbab6156d48d0e8936ee92
-  "memcached.logrotate:"	e4ff27c6ec7dc71a7d651b61fdfdfc051ec62b6a
-  "memcached.service:"	2fd916496f35dd1fb45fc83024067953375d6f05
-  "memcached.sysconfig:"	96628aed4f416024839663b67c996600b7295b9b
+  "memcached-1.4.13.tar.gz": d9a48d222de53a2603fbab6156d48d0e8936ee92

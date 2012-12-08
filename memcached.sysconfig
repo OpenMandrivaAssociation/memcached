@@ -1,0 +1,20 @@
+# Please read the manpage for more info about possible runtime options for
+# memcached.
+
+# IP address to listen on. Set to "INADDR_ANY" or "" to listen on all interfaces
+#IPADDR="127.0.0.1"
+
+# TCP/UDP Port to listen on (both will be enabled)
+#PORT="11211"
+
+# MB memory max to use for object storage
+#CACHESIZE="64"
+
+# Number of threads to use to process incoming requests
+#THREADS="4"
+
+# Max simultaneous connections
+#MAXCONN="1024"
+
+# Additional options
+#OPTIONS=""
