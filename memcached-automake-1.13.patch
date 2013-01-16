@@ -1,0 +1,13 @@
+--- memcached-1.4.13/configure.ac.bero	2013-01-16 01:16:28.694993143 +0100
++++ memcached-1.4.13/configure.ac	2013-01-16 01:16:34.982918511 +0100
+@@ -4,8 +4,8 @@ m4_include([m4/c99-backport.m4])
+ AC_INIT(memcached, VERSION_NUMBER, memcached@googlegroups.com)
+ AC_CANONICAL_SYSTEM
+ AC_CONFIG_SRCDIR(memcached.c)
+-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
+-AM_CONFIG_HEADER(config.h)
++AM_INIT_AUTOMAKE
++AC_CONFIG_HEADERS([config.h])
+ 
+ AC_PROG_CC
+ 
