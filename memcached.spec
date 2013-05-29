@@ -21,7 +21,7 @@ BuildRequires:	sasl-plug-crammd5
 # Required by test suite
 BuildRequires:	sasl-plug-sasldb
 BuildRequires:	xsltproc
-BuildRequires:	libsasl-devel
+BuildRequires:	sasl-devel
 BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(libevent)
 Requires(post,preun,pre,postun):	rpm-helper
