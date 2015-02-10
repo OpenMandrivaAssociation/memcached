@@ -1,11 +1,11 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.13
-Release:	10
+Version:	1.4.22
+Release:	1
 License:	BSD
 Group:		System/Servers
 Url:		http://memcached.org/
-Source0:	http://memcached.googlecode.com/files/%{name}-%{version}.tar.gz
+Source0:	https://github.com/memcached/memcached/archive/%{name}-%{version}.tar.gz
 Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
 Source4:	memcached.service
@@ -24,7 +24,7 @@ BuildRequires:	xsltproc
 BuildRequires:	sasl-devel
 BuildRequires:	perl-devel
 BuildRequires:	pkgconfig(libevent)
-Requires(post,preun,pre,postun):	rpm-helper
+Requires(pre,postun):	rpm-helper
 Requires:	cyrus-sasl
 Requires:	sasl-plug-plain
 Requires:	sasl-plug-crammd5
@@ -35,7 +35,7 @@ database load in dynamic web applications by storing objects in memory. It's
 based on libevent to scale to any size needed, and is  specifically optimized
 to avoid swapping and always use non-blocking I/O.
 
-%package	devel
+%package devel
 Summary:	Files needed for development using memcached protocol
 Group:		Development/C
 Requires:	%{name} = %{version}-%{release}
@@ -51,7 +51,7 @@ autoreconf -fi
 
 %build
 %serverbuild
-%configure2_5x --enable-sasl
+%configure --enable-sasl
 %make
 make docs
 
@@ -68,12 +68,6 @@ install -m755 %{SOURCE4} -D %{buildroot}/lib/systemd/system/%{name}.service
 
 install -m755 scripts/%{name}-tool %{buildroot}%{_bindir}/%{name}-tool
 install -d %{buildroot}/var/run/%{name}
-
-%post
-%_post_service %{name}
-
-%preun
-%_preun_service %{name}
 
 %pre
 %_pre_useradd %{name} /dev/null /bin/false
@@ -95,4 +89,3 @@ install -d %{buildroot}/var/run/%{name}
 %files devel
 %dir %{_includedir}/memcached
 %{_includedir}/memcached/*.h
-
