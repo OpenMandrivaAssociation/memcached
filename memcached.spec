@@ -1,14 +1,17 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
 Version:	1.4.22
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Servers
 Url:		http://memcached.org/
 Source0:	https://github.com/memcached/memcached/archive/%{name}-%{version}.tar.gz
+Source1:        %{name}-tmpfiles.conf
 Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
-Source4:	memcached.service
+Source4:        memcached@.service
+Source5:        memcached.target
+
 # (cg) The test profileing stuff doesn't work
 Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
 #Patch1:		memcached-automake-1.13.patch
@@ -63,12 +66,20 @@ make docs
 %install
 %makeinstall_std
 
+install -m644 %{SOURCE1} -D %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -m644 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-install -m755 %{SOURCE4} -D %{buildroot}/lib/systemd/system/%{name}.service
-
 install -m755 scripts/%{name}-tool %{buildroot}%{_bindir}/%{name}-tool
-install -d %{buildroot}/var/run/%{name}
+
+install -m644 %{SOURCE4} -D %{buildroot}%{_unitdir}/%{name}@.service
+install -m644 %{SOURCE5} -D %{buildroot}%{_unitdir}/%{name}.target
+
+%post
+%tmpfiles_create %{name}
+%_post_service %{name} %{name}.target
+
+%preun
+%_preun_service %{name} %{name}.target
 
 %pre
 %_pre_useradd %{name} /dev/null /bin/false
@@ -80,11 +91,12 @@ install -d %{buildroot}/var/run/%{name}
 %doc AUTHORS* COPYING ChangeLog NEWS doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%attr(755,%{name},%{name}) %dir %{_localstatedir}/run/%{name}
 %{_bindir}/%{name}-tool
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1*
-/lib/systemd/system/%{name}.service
+%{_tmpfilesdir}/%{name}.conf
+%{_unitdir}/%{name}*.service
+%{_unitdir}/%{name}.target
 
 %files devel
 %dir %{_includedir}/memcached
