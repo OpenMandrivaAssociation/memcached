@@ -11,7 +11,7 @@ Source3:	memcached.logrotate
 Source4:	memcached.service
 # (cg) The test profileing stuff doesn't work
 Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
-Patch1:		memcached-automake-1.13.patch
+#Patch1:		memcached-automake-1.13.patch
 Patch2:		memcached-1.4.5-disable-werror.patch
 
 BuildRequires:	doxygen
@@ -47,7 +47,8 @@ access to the memcached binary include files.
 %prep
 %setup -q
 %apply_patches
-autoreconf -fi
+#autoreconf -fi
+./autogen.sh
 
 %build
 %serverbuild
@@ -76,8 +77,7 @@ install -d %{buildroot}/var/run/%{name}
 %_postun_userdel %{name}
 
 %files
-%doc AUTHORS* COPYING ChangeLog NEWS README
-%doc doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt
+%doc AUTHORS* COPYING ChangeLog NEWS doc/CONTRIBUTORS doc/protocol.txt doc/readme.txt
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %attr(755,%{name},%{name}) %dir %{_localstatedir}/run/%{name}
