@@ -1,11 +1,11 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.22
-Release:	4
+Version:	1.4.31
+Release:	1
 License:	BSD
 Group:		System/Servers
 Url:		http://memcached.org/
-Source0:	https://github.com/memcached/memcached/archive/%{name}-%{version}.tar.gz
+Source0:	http://memcached.org/files/%{name}-%{version}.tar.gz
 Source1:        %{name}-tmpfiles.conf
 Source2:	memcached.sysconfig
 Source3:	memcached.logrotate
@@ -51,7 +51,7 @@ access to the memcached binary include files.
 %setup -q
 %apply_patches
 #autoreconf -fi
-./autogen.sh
+[ -e autogen.sh ] && ./autogen.sh
 
 %build
 %serverbuild
