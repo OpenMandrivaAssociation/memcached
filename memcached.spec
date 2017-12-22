@@ -1,6 +1,6 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.4.36
+Version:	1.5.4
 Release:	1
 License:	BSD
 Group:		System/Servers

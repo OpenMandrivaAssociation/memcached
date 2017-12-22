@@ -1,20 +1,9 @@
-From 714d030897f833bd1de38d32c8cbd7b4a3e4ae35 Mon Sep 17 00:00:00 2001
-From: Colin Guthrie <cguthrie@mandriva.org>
-Date: Thu, 22 Apr 2010 16:57:44 +0100
-Subject: [PATCH] Disable test profiling as it doesn't seem to work.
-
----
- Makefile.am |   20 --------------------
- 1 files changed, 0 insertions(+), 20 deletions(-)
-
-diff --git a/Makefile.am b/Makefile.am
-index 3cc5952..6f8b389 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -77,26 +77,6 @@ test:	memcached-debug sizes testapp
- 	$(srcdir)/sizes
- 	$(srcdir)/testapp
- 	prove $(srcdir)/t
+--- memcached-1.5.4/Makefile.am.0000~	2017-12-22 22:59:31.523021440 +0100
++++ memcached-1.5.4/Makefile.am	2017-12-22 23:00:14.314142999 +0100
+@@ -110,26 +110,6 @@ test:	memcached-debug sizes testapp
+ 	else \
+ 	  prove $(srcdir)/t; \
+ 	fi
 -	@if test `basename $(PROFILER)` = "gcov"; then \
 -	  for file in memcached_debug-*.gc??; do \
 -	    mv -f $$file `echo $$file | sed 's/memcached_debug-//'`; \
@@ -38,6 +27,3 @@ index 3cc5952..6f8b389 100644
  
  docs:
  	(cat Doxyfile ; echo "PROJECT_NUMBER=`cat version.num`") | doxygen -
--- 
-1.7.0.5
-

@@ -1,4 +1,2 @@
-removed_sources:
-  memcached-1.4.31.tar.gz: 3ea34f5bc5c5aacb76cfc07f4ee5847f33526cb6
 sources:
-  memcached-1.4.36.tar.gz: 519b417515206b0b95ff9bf14106a891f6a2252e
+  memcached-1.5.4.tar.gz: 29cb75cc234dbaceed6e89db029af8363706f0fe
