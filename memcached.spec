@@ -51,7 +51,7 @@ access to the memcached binary include files.
 %setup -q
 %apply_patches
 #autoreconf -fi
-[ -e autogen.sh ] && ./autogen.sh
+[ -e autogen.sh ] && ./autogen.sh || :
 
 %build
 %serverbuild
