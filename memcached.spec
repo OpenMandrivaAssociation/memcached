@@ -49,7 +49,7 @@ access to the memcached binary include files.
 
 %prep
 %setup -q
-%apply_patches
+%autopatch -p1
 #autoreconf -fi
 [ -e autogen.sh ] && ./autogen.sh || :
 
