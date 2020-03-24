@@ -1,6 +1,6 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.5.20
+Version:	1.6.2
 Release:	1
 License:	BSD
 Group:		System/Servers
@@ -64,7 +64,7 @@ make docs
 #make test
 
 %install
-%makeinstall_std
+%make_install
 
 install -m644 %{SOURCE1} -D %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -m644 %{SOURCE2} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
