@@ -4,7 +4,7 @@ Version:	1.6.23
 Release:	1
 License:	BSD
 Group:		System/Servers
-Url:		http://memcached.org/
+Url:		https://memcached.org/
 Source0:	http://memcached.org/files/%{name}-%{version}.tar.gz
 Source1:        %{name}-tmpfiles.conf
 Source2:	memcached.sysconfig
