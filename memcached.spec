@@ -16,6 +16,11 @@ Source5:        memcached.target
 Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
 #Patch1:		memcached-automake-1.13.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	doxygen
 BuildRequires:	cyrus-sasl
 BuildRequires:	sasl-plug-plain
