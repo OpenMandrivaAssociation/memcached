@@ -1,6 +1,6 @@
 Summary:	High-performance memory object caching system
 Name:		memcached
-Version:	1.6.42
+Version:	1.6.45
 Release:	1
 License:	BSD
 Group:		System/Servers
@@ -18,7 +18,6 @@ Patch0:		0001-Disable-test-profiling-as-it-doesn-t-seem-to-work.patch
 
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	doxygen
